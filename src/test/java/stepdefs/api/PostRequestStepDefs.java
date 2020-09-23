@@ -12,7 +12,8 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-
+import io.restassured.RestAssured;
+import io.restassured.parsing.Parser;
 
 public class PostRequestStepDefs extends TestBase{
 	
@@ -30,20 +31,23 @@ public class PostRequestStepDefs extends TestBase{
 	@Given("I set header and body to create new user")
 	public void i_set_header_and_body_to_create_new_user() {
 	  
-	  HashMap<String,String> hm_header = new HashMap<String, String>();
-	  hm_header.put("Content-Type", "application/json");
+		HashMap<String,String> hm_header = new HashMap<String,String>();
+		hm_header.put("Content-Type", "application/json");
 	  
-	  String body_string = "{ \"name\": \"Rwefsdau ki\",\r\n" + 
-	  		"        \"email\": \""+email+",\r\n" + 
-	  		"        \"gender\": \"Female\",\r\n" + 
+	  String body_string = "{\n" + 
+			" 		\"name\": \"Rwerfsdau kii10\",\n" + 
+	  		"        \"email\": \""+ email +",\n" +
+	  		"        \"gender\": \"Female\",\n" + 
 	  		"        \"status\": \"Active\"}";
 	  
+	  scn.write("body sent as: " +  body_string);
 	  req_spec.headers(hm_header).body(body_string);
 	}
 
 	@When("I hit the api with post request and end point as {string}")
 	public void i_hit_the_api_with_post_request_and_end_point_as(String endPoint) {
 	 resp = req_spec.when().post(endPoint);
+	 scn.write("response:  " +resp.asString());
 	}
 
 	@Then("API created a new User in the system")
@@ -52,8 +56,8 @@ public class PostRequestStepDefs extends TestBase{
 		//.statusCode(302)
 		.body("code", equalTo(201))
 		.body("meta", equalTo(null))
-		.body("data.name",equalTo("Rwefsdau ki"))
-		.body("data.email", equalTo(email))
+		.body("data.name",equalTo("Rwerfsdau kii10"))
+		.body("data.email",equalTo(email))
 		.body("data.gender",equalTo("Female"))
 		.body("data.status",equalTo("Active"));				
 	}
